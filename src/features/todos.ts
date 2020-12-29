@@ -9,17 +9,17 @@ export interface Todo {
 
 interface FetchTodosAction {
   type: TodoTypes.fetchTodos;
-  payload: Todo[]
+  payload: Todo[];
 }
 
 interface PostTodoAction {
-  type: TodoTypes.postTodo
-  payload: Todo
+  type: TodoTypes.postTodo;
+  payload: Todo;
 }
 
 interface DeleteTodoAction {
-  type: TodoTypes.deleteTodo
-  payload: Todo
+  type: TodoTypes.deleteTodo;
+  payload: number;
 }
 
 type TodoAction = FetchTodosAction | PostTodoAction | DeleteTodoAction;
@@ -34,6 +34,8 @@ export const todosReducer = (state: Todo[] = [], action: TodoAction) => {
   switch(action.type) {
     case TodoTypes.fetchTodos:
       return action.payload;
+    case TodoTypes.deleteTodo:
+      return state.filter((todo: Todo) => todo.id !== action.payload);
     default:
       return state;
   }
@@ -49,3 +51,10 @@ export const fetchTodos = () => async (dispatch: Dispatch) => {
     payload: res.data
   });
 };
+
+export const deleteTodo = (id: number): DeleteTodoAction => {
+  return {
+    type: TodoTypes.deleteTodo,
+    payload: id
+  }
+}
